@@ -12,11 +12,12 @@ import (
 // generalStat muestra estadísticas generales de recursos cada 5 segundos
 func generalStat(scale byte) {
 	counter := 0
-	fmt.Printf("%s\t%s\t%s\t%s\n", "Mem Total", "Mem Disponible", "%Mem Utilizada", "%CPU tilizado")
+	fmt.Printf("Hora\tMem Total\tMem Disponible\tMem Utilizada\tCPU tilizado\n")
 	for {
 		c, _ := cpu.Percent(time.Second*5, false)
 		v, _ := mem.VirtualMemory()
-		fmt.Printf("%.2f\t%.2f\t%.2f\t%.2f\n",
+		fmt.Printf("%s\t%.2f\t%.2f\t%.2f\t%.2f\n",
+			time.Now().Format(time.RFC3339),
 			convScale(v.Total, scale),
 			convScale(v.Available, scale),
 			v.UsedPercent,

@@ -13,7 +13,7 @@ func main() {
 	case "g":
 		generalStat('M')
 	case "p":
-		listProcesses()
+		processesStat()
 	}
 
 }

@@ -5,6 +5,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // Estructura para almacenar información sobre un proceso
@@ -42,7 +43,7 @@ func (p *processInfo) getProcessInfo(pid int, dir string) error {
 
 	// Cálculo de memoria residente en MB
 	RSS, _ := strconv.Atoi(fields[23])
-	RSS = RSS * 4 / 1024 // Se asume un tamaño de página de 4KB
+	RSS = RSS * 4 / 1024 // Determinar con getconf PAGESIZE (4K asumido)
 	p.rss = fmt.Sprintf("%d", RSS)
 
 	return nil
@@ -69,16 +70,22 @@ func listSubProcesses(pid int) error {
 				fmt.Println(err)
 				continue
 			}
-			fmt.Println(process)
+			fmt.Printf("%s\t%s\t%s\t%s\t%s\t%s\n",
+				time.Now().Format(time.RFC3339),
+				process.id,
+				process.name,
+				process.state,
+				process.vsize,
+				process.rss)
 		}
 	}
 	return nil
 }
 
-// listProcesses recorre los procesos en directorio "/proc"
-// Cada proceso en /proc tiene subprocesos en sudirectorio "task"
-// Para cada proceso se llama la función list
-func listProcesses() {
+// getProcesses recorre los procesos en directorio "/proc".
+// Cada proceso en /proc tiene subprocesos en sudirectorio "task".
+// Para cada proceso se llama la función listSubProcesses
+func getProcesses() {
 	dir := "/proc"
 	files, err := os.ReadDir(dir)
 	if err != nil {
@@ -91,9 +98,16 @@ func listProcesses() {
 		// Verifica si el nombre del archivo es un número (identificador de proceso)
 		pid, err := strconv.Atoi(file.Name())
 		if err == nil {
-
 			_ = listSubProcesses(pid)
 		}
 	}
 
+}
+
+func processesStat() {
+	fmt.Printf("Hora\tPID\tNombre\tEstado\tVSize(MB)\tRSS(MB)\n")
+	for {
+		getProcesses()
+		time.Sleep(time.Second * 60)
+	}
 }
