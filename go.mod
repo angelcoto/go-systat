@@ -2,10 +2,7 @@ module github.com/angelcoto/go-systat
 
 go 1.21.5
 
-require (
-	github.com/shirou/gopsutil v3.21.11+incompatible
-	github.com/shirou/gopsutil/v3 v3.23.11
-)
+require github.com/shirou/gopsutil/v3 v3.23.11
 
 require (
 	github.com/go-ole/go-ole v1.2.6 // indirect
