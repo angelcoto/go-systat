@@ -10,8 +10,8 @@ import (
 // Estructura para almacenar información sobre un proceso
 type processInfo struct {
 	id    string
-	Name  string
-	State string
+	name  string
+	state string
 	vsize string
 	rss   string
 }
@@ -32,8 +32,8 @@ func (p *processInfo) getProcessInfo(pid int, dir string) error {
 	fields := strings.Fields(string(statContent))
 
 	p.id = fields[0]
-	p.Name = strings.Trim(fields[1], "()")
-	p.State = fields[2]
+	p.name = strings.Trim(fields[1], "()")
+	p.state = fields[2]
 
 	// Cálculo de memoria virtual del proceso en MB
 	vsize, _ := strconv.Atoi(fields[22])
