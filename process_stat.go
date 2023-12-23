@@ -17,8 +17,7 @@ type processInfo struct {
 	rss   string
 }
 
-// getProcessInfo obtiene información sobre un proceso dado su PID,
-// imprimiendo la información en pantalla
+// getProcessInfo obtiene información sobre un proceso dado su PID
 func (p *processInfo) getProcessInfo(pid int, dir string) error {
 
 	// Lee el archivo "/proc/{pid}/stat" para obtener información sobre el proceso
@@ -43,14 +42,14 @@ func (p *processInfo) getProcessInfo(pid int, dir string) error {
 
 	// Cálculo de memoria residente en MB
 	RSS, _ := strconv.Atoi(fields[23])
-	RSS = RSS * 4 / 1024 // Determinar con getconf PAGESIZE (4K asumido)
+	RSS = RSS * 4 / 1024 // Se usa tamaño de página de 4KB.  Se determina getconf PAGESIZE
 	p.rss = fmt.Sprintf("%d", RSS)
 
 	return nil
 }
 
-// listSubProcesses recorre el listado de subprocesos de cada proceso
-// en el directorio "/proc", obteniendo la información de cada uno de ellos
+// listSubProcesses recorre el listado de subprocesos de cada proceso en el
+// directorio "/proc/<PID>/tast", obteniendo la información de cada uno de ellos
 func listSubProcesses(pid int) error {
 	dir := fmt.Sprintf("/proc/%d/task", pid)
 	files, err := os.ReadDir(dir)
