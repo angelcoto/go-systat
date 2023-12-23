@@ -6,14 +6,12 @@ import (
 
 func main() {
 
-	optPtr := flag.String("m", "g", "Modo: g (estadísticas generales), p (lista de procesos)")
+	optPtr := flag.Bool("p", false, "Lista cada 60 segundos los procesos corriendo en el sistema")
 	flag.Parse()
 
-	switch *optPtr {
-	case "g":
-		generalStat('M')
-	case "p":
+	if *optPtr {
 		processesStat()
 	}
+	generalStat('M')
 
 }
