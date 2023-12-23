@@ -67,11 +67,9 @@ func listSubProcesses(pid int) error {
 			err := process.getProcessInfo(pid, dir)
 			if err != nil {
 				fmt.Println(err)
+				continue
 			}
 			fmt.Println(process)
-		} else {
-			fmt.Println(err)
-
 		}
 	}
 	return nil
@@ -95,7 +93,6 @@ func listProcesses() {
 		if err == nil {
 
 			_ = listSubProcesses(pid)
-
 		}
 	}
 
