@@ -11,7 +11,7 @@ const version = "v1.0.0"
 func main() {
 
 	optPtr := flag.Bool("p", false, "Lista cada 60 segundos los procesos corriendo en el sistema")
-	verPtr := flag.Bool("v", false, "Imprime la versión")
+	verPtr := flag.Bool("v", false, "Imprime la versión del programa")
 	flag.Parse()
 
 	if *verPtr {
