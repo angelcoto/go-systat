@@ -14,7 +14,7 @@ func generalStat(scale byte) {
 	counter := 0
 	fmt.Printf("Hora\tMem total\tMem disponible\tMem utilizada(%%)\tCPU utilizado(%%)\n")
 	for {
-		c, _ := cpu.Percent(time.Second*5, false)
+		c, _ := cpu.Percent(time.Second*15, false)
 		v, _ := mem.VirtualMemory()
 		fmt.Printf("%s\t%.2f\t%.2f\t%.2f\t%.2f\n",
 			time.Now().Format(time.RFC3339),

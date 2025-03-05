@@ -107,6 +107,6 @@ func processesStat() {
 	fmt.Printf("Hora\tPID\tNombre\tEstado\tVSize(MB)\tRSS(MB)\n")
 	for {
 		getProcesses()
-		time.Sleep(time.Second * 60)
+		time.Sleep(time.Second * 180)
 	}
 }
