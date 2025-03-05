@@ -110,10 +110,12 @@ func getProcesses() {
 	}
 }
 
-func processesStat() {
+func processesStat(delay int) {
+
+	delaySec := delay * 60
 	fmt.Printf("Hora\tPID\tNombre\tComando\tEstado\tVSize(MB)\tRSS(MB)\n")
 	for {
 		getProcesses()
-		time.Sleep(time.Second * 180)
+		time.Sleep(time.Second * time.Duration(delaySec))
 	}
 }
