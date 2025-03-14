@@ -78,8 +78,16 @@ func listSubProcesses(pid int) error {
 				fmt.Println(err)
 				continue
 			}
-			fmt.Printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
-				time.Now().Format(time.RFC3339),
+
+			fecha := time.Now()
+			fmt.Printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
+				// time.Now().Format(time.RFC3339),
+				// fecha.Format("2006-01-02 15:04:05"),
+				fecha.Format("2006"),
+				fecha.Format("01"),
+				fecha.Format("02"),
+				fecha.Format("15"),
+				fecha.Format("04"),
 				process.id,
 				process.name,
 				process.cmdline,
@@ -113,7 +121,7 @@ func getProcesses() {
 func processesStat(delay int) {
 
 	delaySec := delay * 60
-	fmt.Printf("Hora\tPID\tNombre\tComando\tEstado\tVSize(MB)\tRSS(MB)\n")
+	fmt.Printf("Anio\tMes\tDia\tHora\tMinuto\tPID\tProceso\tComando\tEstado\tVSize_MB\tRSS_MB\n")
 	for {
 		getProcesses()
 		time.Sleep(time.Second * time.Duration(delaySec))
