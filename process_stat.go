@@ -28,22 +28,48 @@ func (p *processInfo) getProcessInfo(pid int, dir string) error {
 		return err
 	}
 
-	// Divide el contenido del archivo en campos
+	/* 	// Divide el contenido del archivo en campos
+	   	fields := strings.Fields(string(statContent))
+
+	   	p.id = fields[0]
+	   	p.name = strings.Trim(fields[1], "()")
+	   	p.state = fields[2]
+
+	   	// Cálculo de memoria virtual del proceso en MB
+	   	vsize, _ := strconv.Atoi(fields[22])
+	   	vsize = vsize / (1024 * 1024) // El valor leído está en bytes
+	   	p.vsize = fmt.Sprintf("%d", vsize)
+
+	   	// Cálculo de memoria residente en MB
+	   	RSS, _ := strconv.Atoi(fields[23])
+	   	RSS = RSS * 4 / 1024 // Se usa tamaño de página de 4KB
+	   	p.rss = fmt.Sprintf("%d", RSS)
+	*/
 	fields := strings.Fields(string(statContent))
 
 	p.id = fields[0]
-	p.name = strings.Trim(fields[1], "()")
-	p.state = fields[2]
 
-	// Cálculo de memoria virtual del proceso en MB
-	vsize, _ := strconv.Atoi(fields[22])
-	vsize = vsize / (1024 * 1024) // El valor leído está en bytes
-	p.vsize = fmt.Sprintf("%d", vsize)
+	statStr := string(statContent) // Convertir []byte a string
 
-	// Cálculo de memoria residente en MB
-	RSS, _ := strconv.Atoi(fields[23])
-	RSS = RSS * 4 / 1024 // Se usa tamaño de página de 4KB
-	p.rss = fmt.Sprintf("%d", RSS)
+	openParen := strings.Index(statStr, "(")
+	closeParen := strings.LastIndex(statStr, ")")
+
+	// Extraer el nombre del proceso correctamente
+	p.name = statStr[openParen+1 : closeParen]
+
+	// Extraer los demás campos después del ")"
+	fields = strings.Fields(statStr[closeParen+2:])
+
+	// Asignaciones
+	//	p.id = fields[0]
+	p.state = fields[1]
+
+	// Memoria virtual (VSZ) y residente (RSS)
+	vsize, _ := strconv.Atoi(fields[20])
+	p.vsize = fmt.Sprintf("%d", vsize/(1024*1024)) // Convertir a MB
+
+	RSS, _ := strconv.Atoi(fields[21])
+	p.rss = fmt.Sprintf("%d", RSS*4/1024) // Convertir a MB (asumiendo páginas de 4 KB)
 
 	// Leer el archivo "/proc/{pid}/cmdline" para obtener la línea de comando completa
 	cmdlinePath := fmt.Sprintf(dir+"/%d/cmdline", pid)
